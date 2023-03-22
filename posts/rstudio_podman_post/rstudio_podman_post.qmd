@@ -8,7 +8,7 @@ categories: [containers, docker, podman, rocker, rstudio]
 format: html
 comments: 
   utterances:
-    repo: seergidev/blog
+    repo: seergidev/seergidev.github.io
 editor: visual
 ---
 
