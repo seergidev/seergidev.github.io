@@ -1,0 +1,13 @@
+---
+title: "seergidev"
+text : "About me"
+image: profile.jpg
+about:
+  template: jolla
+  links:
+    - icon: github
+      text: GitHub
+      href: https://github.com/seergidev/
+---
+
+Life and data explorer. Of deep waters too.

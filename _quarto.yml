@@ -1,0 +1,23 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "seergi's blog"
+  description: "Data science personal blog"
+  navbar:
+    right:
+      - text: "About me"
+        file: about.qmd
+      - icon: github
+        href: https://github.com/seergidev/blog/
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    mermaid:
+      theme: neutral
+    css: styles.css
+
+editor: visual
