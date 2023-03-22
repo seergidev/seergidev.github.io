@@ -6,7 +6,7 @@ date: "03/20/2023"
 image: "./images/podman-rocker.jpg"
 categories: [containers, docker, podman, rocker, rstudio]
 format: html
-comments: 
+comments:
   utterances:
     repo: seergidev/seergidev.github.io
 editor: visual
