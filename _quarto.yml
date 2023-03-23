@@ -5,6 +5,7 @@ project:
 website:
   title: "seergi's blog"
   description: "Data science personal blog"
+  site-url: "https://seergidev.github.io"
   navbar:
     right:
       - text: "About me"
