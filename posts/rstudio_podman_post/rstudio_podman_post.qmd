@@ -34,7 +34,7 @@ mkdir ~/verse423
 ::: callout-note
 ## Choosing images
 
-[The Rocker Project](https://rocker-project.org/) maintains several incremental builds of RStudio: `rocker/rstudio`, `rocker/tidyverse`, `rocker/verse` and so on. Check out the available image on <https://rocker-project.org/images/> and choose the one that fit better your needs.
+[The Rocker Project](https://rocker-project.org/) maintains several incremental builds of RStudio: `rocker/rstudio`, `rocker/tidyverse`, `rocker/verse` and so on. Check out the available images on <https://rocker-project.org/images/> and choose the one that fit better your needs.
 
 There are two container registries available: [Docker Hub](https://hub.docker.com/u/rocker) and [GitHub](https://github.com/rocker-org/rocker-versioned2), with R versions ranging from 3.3.2 up to the latest one.
 :::
@@ -333,5 +333,5 @@ Start the appropriate container whenever you need to work in a project. For *pro
 
 ## Let's thank you!
 
-It has been a rather longthy post, but I believe it can help to better understand how podman and Docker works, specially using the rocker/rstudio images. I hope it's useful to you. Thanks for reading!
+It has been a rather longthy post, but I believe it can help to better understand how podman and Docker works, specially using the *rocker/rstudio* images. I hope it's useful to you. Thanks for reading!
 
