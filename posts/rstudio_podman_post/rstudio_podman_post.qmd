@@ -217,8 +217,8 @@ This is a useful feature because if you encounter issues with package installati
 ```{mermaid}
 flowchart
   A(PODMAN\nrun command) --> B(Host user is:\nuid=1002,gid=1003)
-  B --> C(Entry user inside container is forced to be:\nuid=0,gid=0 root\nbecause of the -u root option\nOnly root can start RStudio server)
-  C --> D(Root user inside the\ncontainer spins up RStudio)
+  B --> C(Entry user of the container is forced to be:\nuid=0,gid=0 root\nby the -u root option\nOnly root can start RStudio server)
+  C --> D(Root user at entry of the\ncontainer spins up RStudio)
   D --> E(RStudio user is\nuid=1000,gid=1000\nby default)
   E --> F(RStudio user is mapped\nto the host user by\nthe --userns option)
   F --> G(The --security-opt option\nallows the container to\nread/write files properly)
@@ -227,9 +227,9 @@ flowchart
 ```{mermaid}
 flowchart
   A(DOCKER<br>run command) --> B(Host user is:\nuid=1002,gid=1003)
-  B --> C(Entry user inside container is:\nuid=0,gid=0 root\nby default)
+  B --> C(Entry user of the container is:\nuid=0,gid=0 root\nby default)
   C --> D(RStudio user is changed to\nuid=1002,gid=1003\nby the -e USERID and -e GROUPID\noptions)
-  D --> E(Root user inside the\ncontainer spins up RStudio)
+  D --> E(Root user at entry of the\ncontainer spins up RStudio)
   E --> F(RStudio user is mapped\nto the host user because\nthey share the same uid/gid)
   F --> G(RStudio user reads/writes\nfiles as if it were the\nhost user properly)
 ```
@@ -331,7 +331,7 @@ You can create the containers without running them right away using `podman crea
 
 Start the appropriate container whenever you need to work in a project. For *project A* would be: `podman start projectA` or `podman restart projectA`. Then point to `localhost:7001` from your web browser and you will be there. In this example port 7001 is mapped to *project A*, port 7002 is mapped to *project B* and port 7003 is mapped to *project C*.
 
-## Thanks!
+## Let's thank you!
 
-It has been a rather long post, but in return, I believe that it can help to better understand how containerization technology works, especially the differences that exist between Podman and Docker when using the rocker/rstudio images. I hope you found it useful and that it helps you to develop and manage your R projects more efficiently. Thanks for reading this guide.
+It has been a rather longthy post, but I believe it can help to better understand how podman and Docker works, specially using the rocker/rstudio images. I hope it's useful to you. Thanks for reading!
 

@@ -186,7 +186,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#check-everything-is-in-order" id="toc-check-everything-is-in-order" class="nav-link" data-scroll-target="#check-everything-is-in-order">Check everything is in order</a></li>
   </ul></li>
   <li><a href="#lets-see-an-example" id="toc-lets-see-an-example" class="nav-link" data-scroll-target="#lets-see-an-example">Let’s see an example</a></li>
-  <li><a href="#thanks" id="toc-thanks" class="nav-link" data-scroll-target="#thanks">Thanks!</a></li>
+  <li><a href="#lets-thank-you" id="toc-lets-thank-you" class="nav-link" data-scroll-target="#lets-thank-you">Let’s thank you!</a></li>
   </ul>
 </nav>
 </nav>
@@ -488,8 +488,8 @@ Installed packages and updates
 <p>
 </p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart
   A(PODMAN\nrun command) --&gt; B(Host user is:\nuid=1002,gid=1003)
-  B --&gt; C(Entry user inside container is forced to be:\nuid=0,gid=0 root\nbecause of the -u root option\nOnly root can start RStudio server)
-  C --&gt; D(Root user inside the\ncontainer spins up RStudio)
+  B --&gt; C(Entry user of the container is forced to be:\nuid=0,gid=0 root\nby the -u root option\nOnly root can start RStudio server)
+  C --&gt; D(Root user at entry of the\ncontainer spins up RStudio)
   D --&gt; E(RStudio user is\nuid=1000,gid=1000\nby default)
   E --&gt; F(RStudio user is mapped\nto the host user by\nthe --userns option)
   F --&gt; G(The --security-opt option\nallows the container to\nread/write files properly)
@@ -507,9 +507,9 @@ Installed packages and updates
 <p>
 </p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-2">flowchart
   A(DOCKER&lt;br&gt;run command) --&gt; B(Host user is:\nuid=1002,gid=1003)
-  B --&gt; C(Entry user inside container is:\nuid=0,gid=0 root\nby default)
+  B --&gt; C(Entry user of the container is:\nuid=0,gid=0 root\nby default)
   C --&gt; D(RStudio user is changed to\nuid=1002,gid=1003\nby the -e USERID and -e GROUPID\noptions)
-  D --&gt; E(Root user inside the\ncontainer spins up RStudio)
+  D --&gt; E(Root user at entry of the\ncontainer spins up RStudio)
   E --&gt; F(RStudio user is mapped\nto the host user because\nthey share the same uid/gid)
   F --&gt; G(RStudio user reads/writes\nfiles as if it were the\nhost user properly)
 </pre>
@@ -607,9 +607,9 @@ podman create
 </div>
 <p>Start the appropriate container whenever you need to work in a project. For <em>project A</em> would be: <code>podman start projectA</code> or <code>podman restart projectA</code>. Then point to <code>localhost:7001</code> from your web browser and you will be there. In this example port 7001 is mapped to <em>project A</em>, port 7002 is mapped to <em>project B</em> and port 7003 is mapped to <em>project C</em>.</p>
 </section>
-<section id="thanks" class="level2">
-<h2 class="anchored" data-anchor-id="thanks">Thanks!</h2>
-<p>It has been a rather long post, but in return, I believe that it can help to better understand how containerization technology works, especially the differences that exist between Podman and Docker when using the rocker/rstudio images. I hope you found it useful and that it helps you to develop and manage your R projects more efficiently. Thanks for reading this guide.</p>
+<section id="lets-thank-you" class="level2">
+<h2 class="anchored" data-anchor-id="lets-thank-you">Let’s thank you!</h2>
+<p>It has been a rather longthy post, but I believe it can help to better understand how podman and Docker works, specially using the rocker/rstudio images. I hope it’s useful to you. Thanks for reading!</p>
 
 
 </section>
