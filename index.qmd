@@ -1,4 +1,6 @@
 ---
+title: "seergidev blog"
+subtitle: "Let's talk about data and computer science"
 listing:
   contents: posts
   sort: "date desc"
