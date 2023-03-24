@@ -1,5 +1,7 @@
 pages:
   stage: deploy
+  script:
+    - echo "This site will be deployed to $CI_PAGES_URL"
   artifacts:
     paths:
       # The folder that contains the files to be exposed at the Page URL
