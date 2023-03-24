@@ -1,5 +1,5 @@
 ---
-title: "seergidev"
+title: "seergi"
 text : "About me"
 image: profile.jpg
 about:
@@ -10,7 +10,7 @@ about:
       href: https://github.com/seergidev/
     - icon: gitlab
       text: GitLab
-      href: https://gitlab.com/seergidev/seergidev.gitlab.io/
+      href: https://gitlab.com/seergidev/
 ---
 
 Life and data explorer. Of deep sea waters too.
