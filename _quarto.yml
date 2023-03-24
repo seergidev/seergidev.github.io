@@ -3,8 +3,8 @@ project:
   output-dir: docs
 
 website:
-  title: "seergidev blog"
-  description: "Data science personal blog"
+  title: "seergi's blog"
+  description: "Data and computer science personal blog"
   site-url: "https://seergidev.github.io"
   navbar:
     right:

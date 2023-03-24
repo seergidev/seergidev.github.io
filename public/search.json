@@ -7,13 +7,6 @@
     "text": "Life and data explorer. Of deep sea waters too."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "seergidev blog",
-    "section": "",
-    "text": "How to run rocker/rstudio images with podman on Fedora\n\n\nMaking us capable to have several isolated instances of RStudio with different versions of R, easily and without interference. With full access to our home folder, as if they were installed directly on our host.\n\n\n\n\ncontainers\n\n\ndocker\n\n\npodman\n\n\nrocker\n\n\nrstudio\n\n\n \n\n\n\n\nMar 20, 2023\n\n\n\n\n\n\nNo matching items"
-  },
-  {
     "objectID": "posts/rstudio_podman_post/rstudio_podman_post.html",
     "href": "posts/rstudio_podman_post/rstudio_podman_post.html",
     "title": "How to run rocker/rstudio images with podman on Fedora",
@@ -47,5 +40,12 @@
     "title": "How to run rocker/rstudio images with podman on Fedora",
     "section": "Let’s thank you!",
     "text": "Let’s thank you!\nIt has been a rather longthy post, but I believe it can help to better understand how podman and Docker works, specially using the rocker/rstudio images. I hope it’s useful to you. Thanks for reading!"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "seergi’s blog",
+    "section": "",
+    "text": "How to run rocker/rstudio images with podman on Fedora\n\n\nMaking us capable to have several isolated instances of RStudio with different versions of R, easily and without interference. With full access to our home folder, as if they were installed directly on our host.\n\n\n\n\ncontainers\n\n\ndocker\n\n\npodman\n\n\nrocker\n\n\nrstudio\n\n\n \n\n\n\n\nMar 20, 2023\n\n\n\n\n\n\nNo matching items"
   }
 ]

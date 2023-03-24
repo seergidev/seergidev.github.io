@@ -1,13 +1,13 @@
 ---
 title: "How to run rocker/rstudio images with podman on Fedora"
 subtitle: "Making us capable to have several isolated instances of RStudio with different versions of R, easily and without interference. With full access to our home folder, as if they were installed directly on our host."
-author: "seergidev"
+author: "seergi"
 date: "03/20/2023"
 image: "./images/podman-rocker.jpg"
 categories: [containers, docker, podman, rocker, rstudio]
 format: html
 comments:
-  utterances:
+  giscus:
     repo: seergidev/seergidev.github.io
 editor: visual
 ---

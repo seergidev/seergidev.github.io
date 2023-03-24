@@ -2,14 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://seergidev.gitlab.io/about.html</loc>
-    <lastmod>2023-03-24T11:29:13.958Z</lastmod>
-  </url>
-  <url>
-    <loc>https://seergidev.gitlab.io/index.html</loc>
-    <lastmod>2023-03-24T11:29:14.240Z</lastmod>
+    <lastmod>2023-03-24T15:20:49.409Z</lastmod>
   </url>
   <url>
     <loc>https://seergidev.gitlab.io/posts/rstudio_podman_post/rstudio_podman_post.html</loc>
-    <lastmod>2023-03-24T11:29:14.688Z</lastmod>
+    <lastmod>2023-03-24T15:20:50.605Z</lastmod>
+  </url>
+  <url>
+    <loc>https://seergidev.gitlab.io/index.html</loc>
+    <lastmod>2023-03-24T15:20:51.201Z</lastmod>
   </url>
 </urlset>

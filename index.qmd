@@ -1,5 +1,5 @@
 ---
-title: "seergidev blog"
+title: "seergi's blog"
 subtitle: "Let's talk about data and computer science"
 listing:
   contents: posts

@@ -2,6 +2,6 @@
 
 Repo of my personal data science blog made with Quarto.
 
-Link on GitHub: https://seergidev.github.io/
+Link to GitHub Pages: https://seergidev.github.io/
 
-Link on GitLab: https://seergidev.gitlab.io/
+Link to GitLab Pages: https://seergidev.gitlab.io/
