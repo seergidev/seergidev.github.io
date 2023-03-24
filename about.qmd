@@ -8,6 +8,9 @@ about:
     - icon: github
       text: GitHub
       href: https://github.com/seergidev/
+    - icon: gitlab
+      text: GitLab
+      href: https://gitlab.com/seergidev/seergidev.gitlab.io/
 ---
 
 Life and data explorer. Of deep sea waters too.

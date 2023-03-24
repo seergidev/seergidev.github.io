@@ -12,6 +12,8 @@ website:
         file: about.qmd
       - icon: github
         href: https://github.com/seergidev/blog/
+      - icon: gitlab
+        href: https://gitlab.com/seergidev/seergidev.gitlab.io/
 format:
   html:
     theme:
