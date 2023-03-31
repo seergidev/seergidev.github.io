@@ -11,16 +11,20 @@ website:
       - text: "About me"
         file: about.qmd
       - icon: github
-        href: https://github.com/seergidev/blog/
-      - icon: gitlab
+        href: https://github.com/seergidev/seergidev.github.io/
+        aria-label: GitHub
+      - icon: git
         href: https://gitlab.com/seergidev/seergidev.gitlab.io/
+        aria-label: GitLab
+      - text: "Dark mode:"
+        file: about.qmd
 format:
   html:
     theme:
       light: flatly
       dark: darkly
     mermaid:
-      theme: neutral
+      theme: default
     css: styles.css
 
 editor: visual

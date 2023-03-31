@@ -1,14 +1,14 @@
 ---
 title: "seergi"
 text : "About me"
-image: profile.jpg
+image: images/profile.jpg
 about:
   template: jolla
   links:
     - icon: github
       text: GitHub
       href: https://github.com/seergidev/
-    - icon: gitlab
+    - icon: git
       text: GitLab
       href: https://gitlab.com/seergidev/
 ---
