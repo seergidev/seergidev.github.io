@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="seergi">
+<meta name="dcterms.date" content="2023-03-20">
+
+<title>seergi’s blog - How to run rocker/rstudio images with podman on Fedora</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">seergi’s blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">
+ <span class="menu-text">About me</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/seergidev/seergidev.github.io/"><i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://gitlab.com/seergidev/seergidev.gitlab.io/"><i class="bi bi-git" role="img" aria-label="GitLab">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">
+ <span class="menu-text">Dark mode:</span></a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#lets-get-to-the-point" id="toc-lets-get-to-the-point" class="nav-link active" data-scroll-target="#lets-get-to-the-point">Let’s get to the point</a></li>
+  <li><a href="#lets-dig-deeper" id="toc-lets-dig-deeper" class="nav-link" data-scroll-target="#lets-dig-deeper">Let’s dig deeper</a>
+  <ul class="collapse">
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a></li>
+  <li><a href="#how-it-is-done-with-docker-under-ubuntu" id="toc-how-it-is-done-with-docker-under-ubuntu" class="nav-link" data-scroll-target="#how-it-is-done-with-docker-under-ubuntu">How it is done with Docker under Ubuntu</a></li>
+  <li><a href="#breaking-down-the-common-options" id="toc-breaking-down-the-common-options" class="nav-link" data-scroll-target="#breaking-down-the-common-options">Breaking down the common options</a></li>
+  <li><a href="#the-difference-handling-the-user-namespace" id="toc-the-difference-handling-the-user-namespace" class="nav-link" data-scroll-target="#the-difference-handling-the-user-namespace">The difference: Handling the user namespace</a></li>
+  <li><a href="#podman-and-docker-flow-execution-of-run-commands" id="toc-podman-and-docker-flow-execution-of-run-commands" class="nav-link" data-scroll-target="#podman-and-docker-flow-execution-of-run-commands">Podman and Docker flow execution of run commands</a></li>
+  <li><a href="#check-everything-is-in-order" id="toc-check-everything-is-in-order" class="nav-link" data-scroll-target="#check-everything-is-in-order">Check everything is in order</a></li>
+  </ul></li>
+  <li><a href="#lets-see-an-example" id="toc-lets-see-an-example" class="nav-link" data-scroll-target="#lets-see-an-example">Let’s see an example</a></li>
+  <li><a href="#lets-thank-you" id="toc-lets-thank-you" class="nav-link" data-scroll-target="#lets-thank-you">Let’s thank you!</a></li>
+  </ul>
+</nav>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">How to run rocker/rstudio images with podman on Fedora</h1>
+<p class="subtitle lead">Making us capable to have several isolated instances of RStudio with different versions of R, easily and without interference. With full access to our home folder, as if they were installed directly on our host.</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">containers</div>
+    <div class="quarto-category">docker</div>
+    <div class="quarto-category">podman</div>
+    <div class="quarto-category">rocker</div>
+    <div class="quarto-category">rstudio</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>seergi </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 20, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-figure quarto-figure-center" style="flex-basis: 55.1%;justify-content: center;">
+<figure class="figure">
+<p><a href="https://podman.io"><img src="https://raw.githubusercontent.com/containers/common/main/logos/podman-logo-full-vert.png" class="img-fluid figure-img" width="300"></a></p>
+<p></p><figcaption class="figure-caption">Manage pods, containers, and container images.</figcaption><p></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center" style="flex-basis: 44.9%;justify-content: center;">
+<figure class="figure">
+<p><a href="https://rocker-project.org"><img src="https://rocker-project.org/img/rocker.png" class="img-fluid figure-img" width="244"></a></p>
+<p></p><figcaption class="figure-caption">The Rocker Project. Docker containers for the R enviroment.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="lets-get-to-the-point" class="level2">
+<h2 class="anchored" data-anchor-id="lets-get-to-the-point">Let’s get to the point</h2>
+<p>We assume that you are working with Fedora 37 and you have podman 4.3.1 or above installed in your system. Check this with <code>podman --version</code>:</p>
+<blockquote class="blockquote">
+<p>$ podman –version<br>
+podman version 4.4.2</p>
+</blockquote>
+<p>First, we create a directory for <strong>RStudio</strong> to store its data and configuration inside our home folder. In this case, we are going to use the <strong>rocker/verse:4.2.3</strong> image, which means we’ll have an RStudio instance with tidyverse and LaTex included, with R version 4.2.3. I’ll name it <strong>verse423</strong>, in reference of the image used:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ~/verse423</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Choosing images
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="https://rocker-project.org/">The Rocker Project</a> maintains several incremental builds of RStudio: <code>rocker/rstudio</code>, <code>rocker/tidyverse</code>, <code>rocker/verse</code> and so on. Check out the available images on <a href="https://rocker-project.org/images/" class="uri">https://rocker-project.org/images/</a> and choose the one that fit better your needs.</p>
+<p>There are two container registries available: <a href="https://hub.docker.com/u/rocker">Docker Hub</a> and <a href="https://github.com/rocker-org/rocker-versioned2">GitHub</a>, with R versions ranging from 3.3.2 up to the latest one.</p>
+</div>
+</div>
+<p>Now we are are ready to spin up the RStudio container as follows:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">-p</span> 8423:8787 <span class="at">--name</span> verse423 <span class="dt">\</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-u</span> root <span class="at">--userns</span><span class="op">=</span>keep-id:uid=1000,gid=1000 <span class="dt">\</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--security-opt</span> label=disable <span class="dt">\</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/verse423:/home/rstudio <span class="dt">\</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~:/home/rstudio/<span class="va">$USER</span> <span class="dt">\</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> DISABLE_AUTH=true <span class="dt">\</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  docker.io/rocker/verse:4.2.3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>That’s it! Open your browser, point it to <strong>localhost:8423</strong>, and we have a fully functional RStudio (R 4.2.3) with quarto, rmarkdown, tidyverse, devtools, pandoc, data.table, GIT and TeX Live pre-installed with seamless full access to our host home directory, as if it were installed directly on our host, without permissions or ownership issues.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Stop and restart containers
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>verse423</code> container will stop when:</p>
+<ul>
+<li>Logging out or shutting down the computer.</li>
+<li>Manually stopping it with <code>podman stop verse423</code>.</li>
+</ul>
+<p>The container could be restarted anytime with <code>podman restart verse423</code>.</p>
+</div>
+</div>
+</section>
+<section id="lets-dig-deeper" class="level2">
+<h2 class="anchored" data-anchor-id="lets-dig-deeper">Let’s dig deeper</h2>
+<section id="motivation" class="level3">
+<h3 class="anchored" data-anchor-id="motivation">Motivation</h3>
+<p>The aim of this post is to show how to use the <strong>rocker/rstudio</strong> images locally in <strong>Fedora</strong> without the need of installing <strong>Docker</strong> and having its background service running, just using the default container manager already included in this distro: <strong>podman</strong>. In the past it was difficult to run these images with podman in a consistent way due to bugs, lack of certain features, difficulties with SELinux and the docker-centric design of the <em>rocker/rstudio</em> images, but since version 4.3.1 it is possible to run them as easy as with Docker, just with a few tweaks in the run command.</p>
+<p>To get a better understanding of how the <code>podman run</code> command showed above works, it is useful to take a look at how these images are run with Docker.</p>
+</section>
+<section id="how-it-is-done-with-docker-under-ubuntu" class="level3">
+<h3 class="anchored" data-anchor-id="how-it-is-done-with-docker-under-ubuntu">How it is done with Docker under Ubuntu</h3>
+<p>Following the guidelines provided by <a href="https://rocker-project.org/images/versioned/rstudio.html">rocker-project</a>, this is the run command to be used with Docker to spin up an RStudio container with full access to our host home folder:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">-p</span> 8423:8787 <span class="at">--name</span> verse423 <span class="dt">\</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/verse423:/home/rstudio <span class="dt">\</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~:/home/rstudio/<span class="va">$USER</span> <span class="dt">\</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> USERID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-u</span><span class="va">)</span> <span class="at">-e</span> GROUPID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-g</span><span class="va">)</span> <span class="dt">\</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> DISABLE_AUTH=true <span class="dt">\</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  docker.io/rocker/verse:4.2.3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+podman with Fedora and Docker with Ubuntu
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that the podman commands were run under Fedora 37 and Docker commands were run under Ubuntu 22.04. That’s because although it is possible to install and run Docker in Fedora, the main idea of this post is to take advantage of the container engine included in Fedora to run the <em>rocker/rstudio</em> images without the need to install any additional software.</p>
+</div>
+</div>
+</section>
+<section id="breaking-down-the-common-options" class="level3">
+<h3 class="anchored" data-anchor-id="breaking-down-the-common-options">Breaking down the common options</h3>
+<ul>
+<li><p><code>-d</code>: Run the container in detached mode, allowing us to continue using the terminal. An alternative option is to replace it with <code>-ti</code>, which allows us to get the <em>stdout</em> of the container at the cost of locking the terminal. Or in case we want to override the <code>/init</code> command placing <code>bash</code> at the end of the run command in order to use the container directly from the terminal (before RStudio is deployed).</p></li>
+<li><p><code>-p 8423:8787</code>: The port assigned to the container. The latter is always 8787 in <em>rocker/rstudio</em> images, the first one can change at will. If you are going to use several instances of RStudio, make sure to assign different ports for each one. For example <code>-p 9500:8787</code>, <code>-p 9501:8787</code> and so on. Ports below 1024 are privileged and should not be used.</p></li>
+<li><p><code>--name verse423</code>: Name for the container. I choose <em>verse423</em> to make it easier to identify with the <em>rocker/rstudio</em> image and R version used. If you need to spin up more than one container, change the name (as for ports, cannot be two containers with the same name).</p></li>
+<li><p><code>-v HOST_DIR:CONT_DIR</code>: Volumes to be used by the container. Host folders must exist before executing the command. With this set up, you’ll have a dedicated persistent folder for RStudio to store their configuration files, workspace, history, etc. always accessible from the host, and a second volume (optional) which bind-mount the entire home folder of the host to give RStudio access to all your files. You could modify this second one to point only to your project or working folder if you don’t want to share the entire home directory.</p></li>
+<li><p><code>-e DISABLE_AUTH=true</code>: Environment variable which tells RStudio to disable authentication, appropriate since we are using the image locally. Otherwise, you should set up a password with <code>-e PASSWORD=&lt;mypassword&gt;</code> option.</p></li>
+</ul>
+</section>
+<section id="the-difference-handling-the-user-namespace" class="level3">
+<h3 class="anchored" data-anchor-id="the-difference-handling-the-user-namespace">The difference: Handling the user namespace</h3>
+<p>The way we handle the user namespace is critical in order to give RStudio access to read and write files on bind-mounted volumes without having permissions problems or weird changes of ownership of directories and files.</p>
+<p>With Docker, we manage it including these options in the run command:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">-e</span> USERID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-u</span><span class="va">)</span> <span class="at">-e</span> GRUOPID=<span class="va">$(</span><span class="fu">id</span> <span class="at">-g</span><span class="va">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>While with podman we include these options:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">-u</span> root <span class="at">--userns</span><span class="op">=</span>keep-id:uid=1000,gid=1000 <span class="dt">\</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>--security-opt label=disable</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Check your UID/GID
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We can check our user id and group id with the <code>id</code> command:</p>
+<blockquote class="blockquote">
+<p>$ id<br>
+uid=1002(sergi) gid=1003(sergi) groups=1003(sergi),27(sudo),115(docker)</p>
+</blockquote>
+<p>The <code>$(id -u)</code> and <code>$(id -g)</code> variables gives us the UID and GID of our user. In this case <em>1002</em> and <em>1003</em>.</p>
+</div>
+</div>
+<p><strong>With Docker, the key point is to make the UID/GID of the user in RStudio (inside the container) match the UID/GID of the user who run the container in the host</strong>. Because the <em>rocker/rstudio</em> images were designed with Docker in mind, the environment variables USERID and GROUPID were provided to allow us to change the UID/GID of the RStudio user (which by default is uid=1000,gid=1000). More information about this <a href="https://rocker-project.org/images/versioned/rstudio.html">here</a>.</p>
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Your host user ID and RStudio user ID
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you are the only user in your computer the chances are you have an uid=1000,gid=1000. In that case the UID/GID of your host user matches automatically the UID/GID of the default RStudio user, and the following command (without setting the USERID and GROUPID options) will work fine:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">-p</span> 8423:8787 <span class="at">--name</span> verse423 <span class="dt">\</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/verse423:/home/rstudio <span class="dt">\</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~:/home/rstudio/<span class="va">$USER</span> <span class="dt">\</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> DISABLE_AUTH=true <span class="dt">\</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  docker.io/rocker/verse:4.2.3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>But be aware that it will not work if your host user has a different UID/GID</strong>. Always include the USERID/GROUPID options with Docker to avoid potential issues while accessing the volumes. Also, you can check your id both in the host and in the terminal inside RStudio: the user name will be different, it doesn’t matter, but the id numbers must be the same.</p>
+</div>
+</div>
+<div id="fig-error" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="./images/error.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Error shown by RStudio when user namespace is not handled properly and there are bind-mounted volumes. It could happen both with Docker and podman.</figcaption><p></p>
+</figure>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+User namespace and volumes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that the handling of user namespace is only necessary when we are bind-mounting volumes. If we just want an ephemeral RStudio or we are fine storing all data inside the container and not having access to the host machine, we can ignore it and the following run command will work fine both with Docker and podman:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-d</span> <span class="at">-p</span> 3333:8787 <span class="at">--name</span> test <span class="dt">\</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> DISABLE_AUTH=true <span class="dt">\</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  docker.io/rocker/rstudio:4.2.3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p><strong>With podman the USERID and GROUPID settings are useless and have no effect in mapping the user namespace</strong>, and therefore we have to take a different approach: Instead of using the options provided by rocker in their images (like with Docker), we are going to tell directly to podman how to handle the user namespace.</p>
+<p><strong>First, we want to map our host user id (for example uid=1002,gid=1003) to the default RStudio user id inside the container (uid=1000,gid=1000)</strong>. This way, we are telling podman that whenever the RStudio user reads or writes a file in a volume, to consider it as if the host user is reading or writing that file. This option is set using <code>--userns=keep-id:uid=1000,gid=1000</code> in the run command.</p>
+<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Set always this option if volumes are bind-mounted
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>With podman, we need to set the <code>–userns=keep-id:uid=1000,gid=1000</code> option if we are using bind-mounted volumes, even if our host user has the same <em>uid</em> and <em>gid</em> as the default RStudio user. By default, podman maps the host user with the root user <em>uid=0,gid=0</em> inside the container. Including this option overrides this behavior and maps the host user to the default RStudio user instead.</p>
+</div>
+</div>
+<p>But there is a problem: If we set this option alone, we also override the entry user of the container, which is root by default. This strips the user of privileges, <strong>preventing RStudio from starting</strong>, according to the rocker documentation:</p>
+<blockquote class="blockquote">
+<p>rocker/rstudio etc. requires the root user to execute the /init command to start RStudio<br>
+Server. So, do not set the –user option if you want to use RStudio Server.</p>
+<p>Instead, the UID and GID of the default user for logging into RStudio can be changed at<br>
+container start by specifying environment variables. Please check the reference page.</p>
+</blockquote>
+<p>Thus, we need to tell podman to give the entry user root privileges again, overriding the <code>--userns</code> option. This is done by using the <code>-u root</code> option.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+You are not root inside RStudio
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that the <code>-u root</code> only affects to the entry user inside the container, not RStudio. Inside RStudio you will be a non-privileged user by default. If for some reason you need to be root inside RStudio (you want to run <code>sudo apt update</code> for example) you have to specify it with the <code>-e ROOT=true</code> option in the run command. If that’s the case, remember to set also a password with the <code>-e PASSWORD=&lt;mypassword&gt;</code> option.</p>
+</div>
+</div>
+<p>We are almost there, but there is one last obstacle: <strong>Volumes will not work as expected because SELnux</strong> (Security-Enhanced Linux, included by default in Fedora) is preventing the container from accessing our files. To solve this issue we have to dig deep in the <a href="https://docs.podman.io/en/latest/markdown/podman-run.1.html">podman documentation</a>. There are several options to handle this problem, but quoting the key paragraph:</p>
+<blockquote class="blockquote">
+<p>The option –security-opt label=disable disables SELinux separation for the container. For example if a user wanted to volume mount their entire home directory into a container, they need to disable SELinux separation.</p>
+</blockquote>
+<p>So we have to include the <code>--security-opt label=disable</code> option to our run command to allow the container read and write files on the bind-mounted volumes, specially if we mount our entire home folder.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+SELinux is not disabled
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that SELinux will not be disabled in the system, only the container with this option in place can ignore its labels. It shouldn’t be a problem when working with these containers locally. Otherwise, check the documentation for alternative solutions. Hint: The use of the flags <code>:U</code>, <code>:z</code> or <code>:Z</code> in volumes could do the trick.</p>
+</div>
+</div>
+<p>That’s it, we’ve solve it! Now we can have one or more RStudio instance in the flavor we choose, with the R version we want, with flawless access to our home folder, keeping our host system clean and without the need of Docker and its background service running.</p>
+<div class="callout-caution callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Installed packages and updates
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that the installed packages and updates are stored inside the container, not in the volumes. Therefore, they will be lost as soon as you delete the container. However, the workspace, environment, history, RStudio configuration, and any other files you stored in the <em>/home/rstudio</em> volume are persistent.</p>
+<p>This is a useful feature because if you encounter issues with package installation, dependencies or updates, and you want to start over while keeping your configuration and files, you can simply delete the container using the <code>podman rm &lt;container&gt;</code> command and then re-run it with the same volume setup. Otherwise, you can keep the container and restart it using <code>podman restart &lt;container&gt;</code> whenever necessary, and your installed packages and updates will remain intact.</p>
+</div>
+</div>
+</section>
+<section id="podman-and-docker-flow-execution-of-run-commands" class="level3">
+<h3 class="anchored" data-anchor-id="podman-and-docker-flow-execution-of-run-commands">Podman and Docker flow execution of run commands</h3>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart
+  A(PODMAN\nrun command) --&gt; B(Host user is:\nuid=1002,gid=1003)
+  B --&gt; C(Entry user of the container is forced to be:\nuid=0,gid=0 root\nby the -u root option\nOnly root can start RStudio server)
+  C --&gt; D(Root user at entry of the\ncontainer spins up RStudio)
+  D --&gt; E(RStudio user is\nuid=1000,gid=1000\nby default)
+  E --&gt; F(RStudio user is mapped\nto the host user by\nthe --userns option)
+  F --&gt; G(The --security-opt option\nallows the container to\nread/write files properly)
+</pre>
+<div id="mermaid-tooltip-1" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+<div class="cell quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-2">flowchart
+  A(DOCKER&lt;br&gt;run command) --&gt; B(Host user is:\nuid=1002,gid=1003)
+  B --&gt; C(Entry user of the container is:\nuid=0,gid=0 root\nby default)
+  C --&gt; D(RStudio user is changed to\nuid=1002,gid=1003\nby the -e USERID and -e GROUPID\noptions)
+  D --&gt; E(Root user at entry of the\ncontainer spins up RStudio)
+  E --&gt; F(RStudio user is mapped\nto the host user because\nthey share the same uid/gid)
+  F --&gt; G(RStudio user reads/writes\nfiles as if it were the\nhost user properly)
+</pre>
+<div id="mermaid-tooltip-2" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="check-everything-is-in-order" class="level3">
+<h3 class="anchored" data-anchor-id="check-everything-is-in-order">Check everything is in order</h3>
+<p>I must admit that I had doubts that the options <code>-u root</code> and <code>--userns=keep-id</code> would work together as I expected, but they do!</p>
+<p>We can check everything is working as expected following these steps:</p>
+<ul>
+<li>Run this ephemeral RStudio container (make sure <em>~/test</em> folder exists on the host beforehand):</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">--rm</span> <span class="at">-it</span> <span class="at">-p</span> 7000:8787 <span class="at">--name</span> test <span class="dt">\</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-u</span> root <span class="at">--userns</span><span class="op">=</span>keep-id:uid=1000,gid=1000 <span class="dt">\</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/test:/home/rstudio <span class="dt">\</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~:/home/rstudio/<span class="va">$USER</span> <span class="dt">\</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> DISABLE_AUTH=true <span class="dt">\</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  docker.io/rocker/rstudio:4.2.3 bash </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><p>Once inside, check your id. It should be: <em>uid=0(root) gid=0(root) groups=0(root),1000(rstudio)</em>.</p></li>
+<li><p>Then spin up RStudio with the <code>/init</code> command.</p></li>
+<li><p>Go to <code>localhost:7000</code>, and check your id from the RStudio terminal. It should be: <em>uid=1000(rstudio) gid=1000(rstudio) groups=1000(rstudio),50(staff)</em>.</p></li>
+<li><p>Write a file from R to check the first volume:<br>
+<code>write("Hello from RStudio","/home/rstudio/hello.txt")</code></p></li>
+<li><p>Write a file from R to check the second volume:<br>
+<code>write("Hello from RStudio 2","/home/rstudio/&lt;your_user&gt;/hello2.txt")</code></p></li>
+<li><p>From the host machine check the ownership of these two files: Should be your host user.</p></li>
+<li><p>Press <code>Ctrl+C</code> from the host terminal to stop RStudio. Type <code>exit</code> to quit the container. Remove it with <code>podman rm test</code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="lets-see-an-example" class="level2">
+<h2 class="anchored" data-anchor-id="lets-see-an-example">Let’s see an example</h2>
+<p>Suppose we are working on three different projects:</p>
+<ul>
+<li><p>Two old projects developed under R 3.6.3 and R 4.0.0 respectively. Let’s call them <em>project A</em> and <em>project B</em>, whose files are located at <em>~/projects/projectA</em> and <em>~/projects/projectB</em> respectively. We don’t need them to have access to our entire home folder, just their folder project.</p></li>
+<li><p>One new project which is being developed under the latest version of R: 4.2.3, called <em>project C</em>, which files are located at <em>~/projects/projectC</em>. We need access to our entire home folder from this project.</p></li>
+</ul>
+<p>First, we need to create the home folders where rstudio will keep its configuration files, one for each project/instance of RStudio:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/projects/rstudio_homes/projectA</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/projects/rstudio_homes/projectB</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/projects/rstudio_homes/projectC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then, we can create the containers with their appropriate volumes bind-mounted:</p>
+<ul>
+<li>For <em>Project A</em>:</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> create <span class="at">-p</span> 7001:8787 <span class="at">--name</span> projectA <span class="dt">\</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-u</span> root <span class="at">--userns</span><span class="op">=</span>keep-id:uid=1000,gid=1000 <span class="dt">\</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--security-opt</span> label=disable <span class="dt">\</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/projects/rstudio_homes/projectA:/home/rstudio <span class="dt">\</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/projects/projectA:/home/rstudio/projectA <span class="dt">\</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> DISABLE_AUTH=true <span class="dt">\</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  docker.io/rocker/rstudio:3.6.3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>For <em>Project B</em>:</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> create <span class="at">-p</span> 7002:8787 <span class="at">--name</span> projectB <span class="dt">\</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-u</span> root <span class="at">--userns</span><span class="op">=</span>keep-id:uid=1000,gid=1000 <span class="dt">\</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--security-opt</span> label=disable <span class="dt">\</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/projects/rstudio_homes/projectB:/home/rstudio <span class="dt">\</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/projects/projectB:/home/rstudio/projectB <span class="dt">\</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> DISABLE_AUTH=true <span class="dt">\</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  docker.io/rocker/rstudio:4.0.0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>For <em>Project C</em>:</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> create <span class="at">-p</span> 7003:8787 <span class="at">--name</span> projectC <span class="dt">\</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-u</span> root <span class="at">--userns</span><span class="op">=</span>keep-id:uid=1000,gid=1000 <span class="dt">\</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--security-opt</span> label=disable <span class="dt">\</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/projects/rstudio_homes/projectC:/home/rstudio <span class="dt">\</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~/projects/projectC:/home/rstudio/projectC <span class="dt">\</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> ~:/home/rstudio/<span class="va">$USER</span> <span class="dt">\</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> DISABLE_AUTH=true <span class="dt">\</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  docker.io/rocker/rstudio:4.2.3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+podman create
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can create the containers without running them right away using <code>podman create</code> instead of <code>podman run</code>. Remove the <code>-d</code> or <code>-ti</code> options from the command when creating containers that way.</p>
+</div>
+</div>
+<p>Start the appropriate container whenever you need to work in a project. For <em>project A</em> would be: <code>podman start projectA</code> or <code>podman restart projectA</code>. Then point to <code>localhost:7001</code> from your web browser and you will be there. In this example port 7001 is mapped to <em>project A</em>, port 7002 is mapped to <em>project B</em> and port 7003 is mapped to <em>project C</em>.</p>
+</section>
+<section id="lets-thank-you" class="level2">
+<h2 class="anchored" data-anchor-id="lets-thank-you">Let’s thank you!</h2>
+<p>It has been a rather longthy post, but I believe it can help to better understand how podman and Docker works, specially using the <em>rocker/rstudio</em> images. I hope it’s useful to you. Thanks for reading!</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="seergidev/seergidev.github.io" data-repo-id="R_kgDOJMKq-A" data-category="General" data-category-id="DIC_kwDOJMKq-M4CVHoU" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
