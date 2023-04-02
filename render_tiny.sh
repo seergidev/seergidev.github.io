@@ -1,3 +1,3 @@
 #!/bin/bash
 
-quarto render --site-url=http://seergi.cat/blog/ --output-dir=tiny
+quarto render --site-url=blog.seergi.cat --output-dir=tiny
