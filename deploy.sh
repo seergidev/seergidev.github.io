@@ -12,15 +12,15 @@ git commit -m "$1"
 echo "Commit with message done"
 
 # Deploy at github
-# git push github main
+git push github main
 echo "Deployed to github"
 
 # Deploy at gitlab
-# git push gitlab main
+git push gitlab main
 echo "Deployed to gitlab"
 
 # Deploy at tiny
-#git push tiny main
+git push tiny main
 echo "Deployed to tiny"
 
 
