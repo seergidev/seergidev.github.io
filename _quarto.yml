@@ -1,11 +1,11 @@
 project:
   type: website
-  output-dir: docs
+  #output-dir: {docs, public, tiny or other)
 
 website:
   title: "seergi's blog"
   description: "Data and computer science personal blog"
-  site-url: "https://seergidev.github.io"
+  #site-url: "https://seergidev.github.io" or "gitlab.io" or "blog.seergi.cat" or other
   navbar:
     right:
       - text: "About me"
