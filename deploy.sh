@@ -10,7 +10,7 @@ git add -A
 git commit -m $1
 
 # Deploy at github
-mv .gitigonore .gitignorebak
+mv .gitignore .gitignorebak
 mv .gitignore.github .gitignore
 sh render_github.sh
 git push github main
@@ -23,7 +23,7 @@ git push gitlab main
 
 # Deploy at tiny
 mv .gitignore .gitignore.gitlab
-mv .gitigonre.tiny .gitignore
+mv .gitignore.tiny .gitignore
 sh render_tiny.sh
 git push tiny main
 
